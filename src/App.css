@@ -37,7 +37,7 @@ table td {
   padding: 3px;
 }
 
-button {
+#add_button {
   border-radius: 8px;
   border: 1px solid transparent;
   font-size: 1em;

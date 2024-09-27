@@ -22,6 +22,10 @@ export default function TodoList() {
         }
     };
 
+    const handleDeleteTodo = (index) => {
+        setTodos(todos.filter((_, i) => i !== index));
+    };
+
     return(
         <>
         <div id="todo_title">
@@ -32,10 +36,10 @@ export default function TodoList() {
                 <legend>Add Todo:</legend>
                 Description: <input name="description" placeholder="Description" onChange={handleChange} value={descDate.description} />
                 Date: <input name="date" placeholder="Date" onChange={handleChange} value={descDate.date}/>
-                <button onClick={addTodo}>Add</button>
+                <button id="add_button" onClick={addTodo}>Add</button>
             </fieldset>
         </div>
-            <TodoTable todos={ todos } />
+            <TodoTable todos={todos} onDelete={handleDeleteTodo} />
         </>
     );
 }
