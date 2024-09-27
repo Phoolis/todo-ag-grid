@@ -2,11 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: left;
-}
-
-.App {
-  background-color: lightgrey;
+  text-align: center;
 }
 
 .App table {
@@ -15,8 +11,37 @@
   margin-top: 10px;
 }
 
+#todo_title {
+  color: white;
+  background-color: black;
+  padding: 1px;
+}
+
+#todo_input {
+  width: 640px;
+}
+
+#todo_input fieldset {
+  border: 2px solid black;
+  padding: 10px;
+  position: relative;
+}
+
+#todo_input input {
+  margin: 5px;
+}
+
 table th,
 table td {
-  border: 1px solid black;
-  padding: 6px;
+  border-bottom: 1px dotted black;
+  padding: 3px;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 1em;
+  font-family: inherit;
+  padding: 0.4em 1em;
+  margin-left: 10px;
 }
