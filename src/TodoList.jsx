@@ -4,9 +4,16 @@ import "ag-grid-community/styles/ag-theme-material.css"; // Material Design them
 import { AgGridReact } from "ag-grid-react";
 import { useState, useRef } from "react";
 
+import Button from "@mui/material/Button"
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
+
 
 export default function TodoList() {
-    const [todo, setTodo] = useState({ desc: "", priority: "", date: "" });
+    const [todo, setTodo] = useState({ desc: "", priority: "", date: dayjs().format("DD/MM/YYYY") });
     const [todos, setTodos] = useState([]);
     const gridRef = useRef();
 
@@ -19,10 +26,15 @@ export default function TodoList() {
         { field: 'date', filter: true }
     ]);
 
-    // Remember to call preventDefault() if using form
     const addTodo = () => {
         setTodos([...todos, todo]);
-        setTodo({ desc: "", priority: "", date: "" });
+        setTodo({ desc: "", priority: "", date: dayjs().format("DD/MM/YYYY") });
+    };
+
+    const pickDateFunc = (newDate) => {
+        if (newDate && dayjs(newDate).isValid()) {
+            setTodo({ ...todo, date: dayjs(newDate).format("DD/MM/YYYY") })
+        }
     };
 
     const handleDeleteTodo = () => {
@@ -34,21 +46,27 @@ export default function TodoList() {
 
     return (
         <>
-            <input
-                type="date"
-                placeholder="Date"
-                onChange={e => setTodo({ ...todo, date: e.target.value })}
-                value={todo.date} />
-            <input
-                placeholder="Description"
-                onChange={e => setTodo({ ...todo, desc: e.target.value })}
-                value={todo.desc} />
-            <input
-                placeholder="Priority"
-                onChange={e => setTodo({ ...todo, priority: e.target.value })}
-                value={todo.priority} />
-            <button onClick={addTodo}>Add</button>
-            <button onClick={handleDeleteTodo}>Delete</button>
+            <Stack
+                mt={2}
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+                alignItems="center">
+                <DatePicker
+                    label="Date"
+                    value={dayjs(todo.date, "DD/MM/YYYY")}
+                    onChange={newValue => pickDateFunc(newValue)} />
+                <TextField
+                    label="Description"
+                    onChange={e => setTodo({ ...todo, desc: e.target.value })}
+                    value={todo.desc} />
+                <TextField
+                    label="Priority"
+                    onChange={e => setTodo({ ...todo, priority: e.target.value })}
+                    value={todo.priority} />
+                <Button variant="contained" onClick={addTodo}>Add</Button>
+                <Button variant="outlined" color="error" onClick={handleDeleteTodo}>Delete</Button>
+            </Stack>
             <div className="ag-theme-material" style={{ width: 700, height: 800 }}>
                 <AgGridReact
                     ref={gridRef}
