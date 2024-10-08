@@ -10,10 +10,11 @@ import Stack from '@mui/material/Stack';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
+import { MenuItem, Select } from "@mui/material";
 
 
 export default function TodoList() {
-    const [todo, setTodo] = useState({ desc: "", priority: "", date: dayjs().format("DD/MM/YYYY") });
+    const [todo, setTodo] = useState({ desc: "", priority: "Medium", date: dayjs().format("DD/MM/YYYY") });
     const [todos, setTodos] = useState([]);
     const gridRef = useRef();
 
@@ -28,7 +29,7 @@ export default function TodoList() {
 
     const addTodo = () => {
         setTodos([...todos, todo]);
-        setTodo({ desc: "", priority: "", date: dayjs().format("DD/MM/YYYY") });
+        setTodo({ desc: "", priority: "Medium", date: dayjs().format("DD/MM/YYYY") });
     };
 
     const pickDateFunc = (newDate) => {
@@ -60,10 +61,15 @@ export default function TodoList() {
                     label="Description"
                     onChange={e => setTodo({ ...todo, desc: e.target.value })}
                     value={todo.desc} />
-                <TextField
+                <Select
                     label="Priority"
                     onChange={e => setTodo({ ...todo, priority: e.target.value })}
-                    value={todo.priority} />
+                    value={todo.priority}
+                >
+                    <MenuItem value={"Low"}>Low</MenuItem>
+                    <MenuItem value={"Medium"}>Medium</MenuItem>
+                    <MenuItem value={"High"}>High</MenuItem>
+                </Select>
                 <Button variant="contained" onClick={addTodo}>Add</Button>
                 <Button variant="outlined" color="error" onClick={handleDeleteTodo}>Delete</Button>
             </Stack>
