@@ -1,5 +1,7 @@
 import './App.css'
 
+import { useState } from 'react';
+
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -16,8 +18,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import TodoList from './TodoList'
+import { Tab, Tabs } from '@mui/material';
 
 function App() {
+  const [value, setValue] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setValue(newValue);
+  }
+
 
   return (
     <Container maxWidth="xl">
@@ -30,9 +39,22 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TodoList />
-      </LocalizationProvider>
+      <Tabs value={value} onChange={handleTabChange}>
+        <Tab label="Home" value={0} />
+        <Tab label="Todo List" value={1} />
+      </Tabs>
+
+      {value === 0 && (
+        <div className="ag-theme-material" style={{ width: 900, height: 800 }}>
+          <h1>Welcome to my Simple Todo List App!</h1>
+          <p>Select "Todo List" from the menu tab to access it.</p>
+        </div>
+      )}
+      {value === 1 && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TodoList />
+        </LocalizationProvider>
+      )}
     </Container>
   )
 }

@@ -73,7 +73,7 @@ export default function TodoList() {
                 <Button variant="contained" onClick={addTodo}>Add</Button>
                 <Button variant="outlined" color="error" onClick={handleDeleteTodo}>Delete</Button>
             </Stack>
-            <div className="ag-theme-material" style={{ width: 700, height: 800 }}>
+            <div className="ag-theme-material" style={{ width: 900, height: 800 }}>
                 <AgGridReact
                     ref={gridRef}
                     onGridReady={params => gridRef.current = params.api}
