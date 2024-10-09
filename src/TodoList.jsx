@@ -10,21 +10,30 @@ import Stack from '@mui/material/Stack';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, useMediaQuery } from "@mui/material";
 
 
 export default function TodoList() {
+
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const [todo, setTodo] = useState({ desc: "", priority: "Medium", date: dayjs().format("DD/MM/YYYY") });
     const [todos, setTodos] = useState([]);
     const gridRef = useRef();
 
     const [columnDefs, setColumnDefs] = useState([
-        { field: 'desc', sortable: false, filter: true },
+        { field: 'desc', filter: false, flex: 2, minWidth: 120 },
         {
-            field: 'priority', filter: true,
+            field: 'priority', filter: false, flex: 1, minWidth: 60,
             cellStyle: params => params.value === "High" ? { color: 'red' } : { color: 'black' }
         },
-        { field: 'date', filter: true }
+        { field: 'date', filter: false, flex: 1, minWidth: 100 },
+        {
+            headerName: "",
+            checkboxSelection: true,
+            pinned: 'right',
+            width: isSmallScreen ? 20 : 70,
+        }
     ]);
 
     const addTodo = () => {
@@ -48,38 +57,45 @@ export default function TodoList() {
     return (
         <>
             <Stack
-                mt={2}
-                direction="row"
-                spacing={2}
+                mt={1}
+                direction={isSmallScreen ? "column" : "row"}
+                spacing={1}
                 justifyContent="center"
-                alignItems="center">
+                alignItems={isSmallScreen ? "stretch" : "center"}
+                sx={{ width: isSmallScreen ? '100%' : 'auto', maxWidth: '900px' }}>
                 <DatePicker
                     label="Date"
                     value={dayjs(todo.date, "DD/MM/YYYY")}
-                    onChange={newValue => pickDateFunc(newValue)} />
+                    onChange={newValue => pickDateFunc(newValue)}
+                    fullWidth={isSmallScreen} />
                 <TextField
                     label="Description"
                     onChange={e => setTodo({ ...todo, desc: e.target.value })}
-                    value={todo.desc} />
+                    value={todo.desc}
+                    fullWidth={isSmallScreen} />
                 <Select
                     label="Priority"
                     onChange={e => setTodo({ ...todo, priority: e.target.value })}
                     value={todo.priority}
+                    fullWidth={isSmallScreen}
                 >
                     <MenuItem value={"Low"}>Low</MenuItem>
                     <MenuItem value={"Medium"}>Medium</MenuItem>
                     <MenuItem value={"High"}>High</MenuItem>
                 </Select>
-                <Button variant="contained" onClick={addTodo}>Add</Button>
-                <Button variant="outlined" color="error" onClick={handleDeleteTodo}>Delete</Button>
+                <Button variant="contained" onClick={addTodo} fullWidth={isSmallScreen}>Add</Button>
+                <Button variant="outlined" color="error" onClick={handleDeleteTodo} fullWidth={isSmallScreen}>Delete</Button>
             </Stack>
-            <div className="ag-theme-material" style={{ width: 900, height: 800 }}>
+            <div className="ag-theme-material" style={{ width: "100%", maxWidth: 900, height: 800 }}>
                 <AgGridReact
                     ref={gridRef}
-                    onGridReady={params => gridRef.current = params.api}
+                    onGridReady={params => {
+                        gridRef.current = params.api;
+                        params.api.sizeColumnsToFit();
+                    }}
                     rowData={todos}
                     columnDefs={columnDefs}
-                    rowSelection={{ mode: "singleRow" }}
+                    domLayout="autoHeight"
                 />
             </div>
         </>

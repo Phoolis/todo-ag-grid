@@ -29,7 +29,7 @@ function App() {
 
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth={false} style={{ padding: 0 }}>
       <CssBaseline />
       <AppBar position='static'>
         <Toolbar>
@@ -45,7 +45,7 @@ function App() {
       </Tabs>
 
       {value === 0 && (
-        <div className="ag-theme-material" style={{ width: 900, height: 800 }}>
+        <div className="ag-theme-material" style={{ width: '100%', maxWidth: 900, height: 800 }}>
           <h1>Welcome to my Simple Todo List App!</h1>
           <p>Select "Todo List" from the menu tab to access it.</p>
         </div>
