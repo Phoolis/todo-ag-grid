@@ -15,6 +15,10 @@
   box-sizing: border-box;
 }
 
+.ag-theme-material .done-row {
+  background-color: lightgreen !important;
+}
+
 @media (max-width: 600px) {
   .ag-theme-material {
     width: 100%;

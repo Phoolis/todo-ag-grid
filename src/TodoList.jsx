@@ -10,14 +10,14 @@ import Stack from '@mui/material/Stack';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
-import { FormControl, InputLabel, MenuItem, Select, useMediaQuery, OutlinedInput } from "@mui/material";
+import { MenuItem, useMediaQuery } from "@mui/material";
 
 
 export default function TodoList() {
 
     const isSmallScreen = useMediaQuery('(max-width:600px)');
 
-    const [todo, setTodo] = useState({ desc: "", priority: "Med", date: dayjs().format("DD/MM/YYYY") });
+    const [todo, setTodo] = useState({ desc: "", priority: "Med", date: dayjs().format("DD/MM/YYYY"), isDone: false });
     const [todos, setTodos] = useState([]);
     const gridRef = useRef();
 
@@ -38,7 +38,7 @@ export default function TodoList() {
 
     const addTodo = () => {
         setTodos([...todos, todo]);
-        setTodo({ desc: "", priority: "Med", date: dayjs().format("DD/MM/YYYY") });
+        setTodo({ desc: "", priority: "Med", date: dayjs().format("DD/MM/YYYY"), isDone: false });
     };
 
     const pickDateFunc = (newDate) => {
@@ -52,6 +52,27 @@ export default function TodoList() {
         if (nodes.length > 0) {
             setTodos(todos.filter((_, i) => i != nodes[0].id))
         }
+    };
+
+    const markDone = () => {
+        const nodes = gridRef.current.getSelectedNodes();
+        if (nodes.length > 0) {
+            const updatedTodos = todos.map((todo, i) => {
+                if (i == nodes[0].id) {
+                    console.log(i, todo);
+                    return { ...todo, isDone: true };
+                }
+                return todo;
+            });
+
+            setTodos(updatedTodos);
+            console.log(updatedTodos);
+            gridRef.current.refreshCells();
+        }
+    };
+
+    const getRowClass = (params) => {
+        return params.data.isDone ? 'done-row' : undefined;
     };
 
     return (
@@ -91,6 +112,7 @@ export default function TodoList() {
                     direction="row"
                     spacing={1}>
                     <Button variant="contained" onClick={addTodo} fullWidth={isSmallScreen}>Add</Button>
+                    <Button variant="contained" color="success" onClick={markDone} fullWidth={isSmallScreen}>Done</Button>
                     <Button variant="outlined" color="error" onClick={handleDeleteTodo} fullWidth={isSmallScreen}>Delete</Button>
                 </Stack>
 
@@ -104,6 +126,7 @@ export default function TodoList() {
                     }}
                     rowData={todos}
                     columnDefs={columnDefs}
+                    getRowClass={getRowClass}
                     domLayout="autoHeight"
                 />
             </div>
