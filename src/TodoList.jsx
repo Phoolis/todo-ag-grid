@@ -59,15 +59,12 @@ export default function TodoList() {
         if (nodes.length > 0) {
             const updatedTodos = todos.map((todo, i) => {
                 if (i == nodes[0].id) {
-                    console.log(i, todo);
                     return { ...todo, isDone: true };
                 }
                 return todo;
             });
 
             setTodos(updatedTodos);
-            console.log(updatedTodos);
-            gridRef.current.refreshCells();
         }
     };
 
